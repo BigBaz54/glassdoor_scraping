@@ -43,6 +43,7 @@ function getQuestionsByJob(job, nb_questions = 100) {
   // writes the questions in a file
   let page = 1;
   let question_number = 0;
+  let consecutive_retries = 0;
   const fs = require('fs');
   const stream = fs.createWriteStream("questions_" + job + ".txt");
   stream.once('open', async function() {
@@ -56,8 +57,14 @@ function getQuestionsByJob(job, nb_questions = 100) {
       const questions = getQuestionsByJobFromText(t);
       questions.forEach(q => stream.write(q + "\n-----------------\n"));
       if (questions.length !== 0) {
+        consecutive_retries = 0;
         page++;
         question_number += questions.length;
+      } else {
+        consecutive_retries++;
+        if (consecutive_retries > 10) {
+          break;
+        }
       }
     }
   });
@@ -127,6 +134,7 @@ function getQuestionsByEmployer(employerName, nb_questions = 100, jobFilter = ""
   // writes the questions in a file
   let page = 1;
   let question_number = 0;
+  let consecutive_retries = 0;
   const fs = require('fs');
   const stream = fs.createWriteStream("questions_" + employerName + "_" + jobFilter +".txt");
   stream.once('open', async function() {
@@ -140,8 +148,14 @@ function getQuestionsByEmployer(employerName, nb_questions = 100, jobFilter = ""
       const questions = getQuestionsByEmployerFromText(t);
       questions.forEach(q => stream.write(q + "\n-----------------\n"));
       if (questions.length !== 0) {
+        consecutive_retries = 0;
         page++;
         question_number += questions.length;
+      } else {
+        consecutive_retries++;
+        if (consecutive_retries > 10) {
+          break;
+        }
       }
     }
   });
