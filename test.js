@@ -1,4 +1,4 @@
-async function getPageText(url) {
+async function getJobPageText(url) {
     const text = await fetch(url, {
         "headers": {
           "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
@@ -23,13 +23,13 @@ async function getPageText(url) {
     return text;
 }
 
-function buildUrl(job, page = 1) {
+function buildJobUrl(job, page = 1) {
   job = job.replace(/ /g, "-");
   const endPos = job.length + 6;
   return "https://www.glassdoor.com/Interview/nancy-" + job + "-interview-questions-SRCH_IL.0,5_IC2954424_KO6,"+ endPos +"_SDMC_IP" + page + ".htm";
 }
 
-function getQuestionsFromText(text) {
+function getQuestionsByJobFromText(text) {
   const questions = text.split('<h3 class="css-1jvs3tk edupdmz3">');
   questions.shift();
   const formattedQuestions = questions.map(q => {
@@ -47,13 +47,13 @@ function getQuestionsByJob(job, nb_questions = 100) {
   const stream = fs.createWriteStream("questions_" + job + ".txt");
   stream.once('open', async function(fd) {
     while (question_number < nb_questions) {
-      let t = await getPageText(buildUrl(job, page))
+      let t = await getJobPageText(buildJobUrl(job, page))
       t = t.replace(/&quot;/g, '"');
       t = t.replace(/&amp;/g, '&');
       t = t.replace(/&lt;/g, '<');
       t = t.replace(/&gt;/g, '>');
       t = t.replace(/&#x27;/g, '\'');
-      const questions = getQuestionsFromText(t);
+      const questions = getQuestionsByJobFromText(t);
       questions.forEach(q => stream.write(q + "\n-----------------\n"));
       if (questions.length !== 0) {
         page++;
@@ -62,5 +62,13 @@ function getQuestionsByJob(job, nb_questions = 100) {
     }
   });
 }
+
+
+
+
+
+
+
+
 
 getQuestionsByJob("financial analyst", 1000);
