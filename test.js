@@ -86,9 +86,9 @@ function getEmployerId(name) {
   return id;
 }
 
-async function buildEmployerUrl(employerName, page = 1) {
+async function buildEmployerUrl(employerName, page = 1, jobFilter = "") {
   const employerId = await getEmployerId(employerName);
-  return "https://www.glassdoor.com/Interview/useless-field-Interview-Questions-E" + employerId + "_P" + page + ".htm";
+  return "https://www.glassdoor.com/Interview/useless-field-Interview-Questions-E" + employerId + "_P" + page + ".htm" + "?filter.jobTitleFTS=" + jobFilter;
 }
 
 function getEmployerPageText(url) {
@@ -123,15 +123,15 @@ function getQuestionsByEmployerFromText(text) {
   return formattedQuestions;
 }
 
-function getQuestionsByEmployer(employerName, nb_questions = 100) {
+function getQuestionsByEmployer(employerName, nb_questions = 100, jobFilter = "") {
   // writes the questions in a file
   let page = 1;
   let question_number = 0;
   const fs = require('fs');
-  const stream = fs.createWriteStream("questions_" + employerName + ".txt");
+  const stream = fs.createWriteStream("questions_" + employerName + "_" + jobFilter +".txt");
   stream.once('open', async function() {
     while (question_number < nb_questions) {
-      let t = await getEmployerPageText(await buildEmployerUrl(employerName, page));
+      let t = await getEmployerPageText(await buildEmployerUrl(employerName, page, jobFilter));
       t = t.replace(/&quot;/g, '"');
       t = t.replace(/&amp;/g, '&');
       t = t.replace(/&lt;/g, '<');
@@ -149,4 +149,4 @@ function getQuestionsByEmployer(employerName, nb_questions = 100) {
 
 
 // getQuestionsByJob("financial analyst", 100);
-getQuestionsByEmployer("goldman sachs", 100);
+getQuestionsByEmployer("goldman sachs", 100, "summer internship");
