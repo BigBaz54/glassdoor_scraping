@@ -1,5 +1,5 @@
 async function getPageText(url) {
-    var text = await fetch(url, {
+    const text = await fetch(url, {
         "headers": {
           "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
           "accept-language": "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7",
@@ -39,7 +39,7 @@ function getQuestionsFromText(text) {
   return formattedQuestions;
 }
 
-function getQuestions(job, nb_questions = 100) {
+function getQuestionsByJob(job, nb_questions = 100) {
   // writes the questions in a file
   let page = 1;
   let question_number = 0;
@@ -63,4 +63,4 @@ function getQuestions(job, nb_questions = 100) {
   });
 }
 
-getQuestions("software engineer", 100);
+getQuestionsByJob("financial analyst", 1000);
