@@ -1,4 +1,4 @@
-# glassdoor_scraping
+# Glassdoor scraping
 
 This project is a web scraping tool that extracts interview questions from Glassdoor. It allows users to scrape interview questions for specific jobs or from specific employers and save them to a file for further analysis or reference.
 
