@@ -162,5 +162,18 @@ function getQuestionsByEmployer(employerName, nb_questions = 100, jobFilter = ""
 }
 
 
-// getQuestionsByJob("financial analyst", 100);
-getQuestionsByEmployer("goldman sachs", 1000, "trader");
+// Handle command-line arguments
+const args = process.argv.slice(2);
+const command = args[0];
+const job = args[1];
+const nbQuestions = parseInt(args[2]) || 100;
+const employerName = args[1];
+const jobFilter = args[3] || "";
+
+if (command === "getQuestionsByJob") {
+  getQuestionsByJob(job, nbQuestions);
+} else if (command === "getQuestionsByEmployer") {
+  getQuestionsByEmployer(employerName, nbQuestions, jobFilter);
+} else {
+  console.error("Invalid command. Usage: node scraping.js <command> [arguments]");
+}
