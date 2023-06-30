@@ -163,4 +163,4 @@ function getQuestionsByEmployer(employerName, nb_questions = 100, jobFilter = ""
 
 
 // getQuestionsByJob("financial analyst", 100);
-getQuestionsByEmployer("goldman sachs", 100, "summer internship");
+getQuestionsByEmployer("goldman sachs", 1000, "trader");
